@@ -282,29 +282,64 @@ $(document).ready(function(){
 	createFloor(1,current_dir);
 	createFloor(2,current_dir);*/
 	startFloor(0,'yellow',current_dir);
-	rotateFloorButton(0,"rot");
+	rotateFloorButton(0);
 	//showNPC(npcA,3);
 	//var w=-150, h=-300;
 	//$('#jugador01').css({"background-position" : 5*w+"px"+" "+3*h+"px"});
 });
 
-function rotateFloorButton(f,typ){
+function rotateFloorButton(f){
 	$('#buttons').css('z-index', 1000);
 	$('.button_dev').bind('click', function(){
+		var to_cam;
+		switch($(this).attr('id')){
+			case "rotateCW":
+				if(current_dir=="ori") to_cam="rot";
+				if(current_dir=="rot") to_cam="inv";
+				if(current_dir=="rev") to_cam="ori";
+				if(current_dir=="inv") to_cam="rev";
+				break;
+			case "rotateCCW":
+				if(current_dir=="ori") to_cam="rev";
+				if(current_dir=="rot") to_cam="ori";
+				if(current_dir=="rev") to_cam="inv";
+				if(current_dir=="inv") to_cam="rot";
+				break;
+			default: break;
+		}
 		$('#piso'+f+' *').remove();
-		rotatePlayerPos(posA, typ, 20);
-		startFloor(f,'yellow',typ);
-		flipClass(rotateLevel(eval('floor_'+f),typ),f);
+		rotatePlayerPos(posA, to_cam, eval('floor_'+f).length);
+		startFloor(f,'yellow',to_cam);
+		flipClass(rotateLevel(eval('floor_'+f),to_cam),f,to_cam);
+		current_dir=to_cam;
 	});
 }
-function flipClass(arr,f){
+function flipClass(arr,f,typ){
 	for(var g=0; g<arr.length; g++){
 		for(var i=0;i<arr[0].length; i++){
 			var t=arr[g][i];
 			if(t>4 && t<165 || t>185 && t<321 || t>360 && t<425){////yellow
 				var p;
-				if(arr[g][i]%4==0) p=-3;
-				else p=1;
+				switch(typ){
+					case "rot":
+						if(arr[g][i]%4==0) p=-3;
+						else p=1;
+						break;
+					case "rev":
+						if(arr[g][i]%4==1) p=+3;
+						else p=-1;
+						break;
+					case "inv":
+						if(arr[g][i]%4==0) p=-2;
+						if(arr[g][i]%4==3) p=-2;
+						if(arr[g][i]%4==2) p=+2;
+						if(arr[g][i]%4==1) p=+2;
+						break;
+					case "ori":
+						p=0;
+						break;
+					default: break;
+				}
 				var tile=$('#tile'+f+"_"+g+"_"+i);
 				tile.attr({class: "txt"+(parseInt(tile.attr('level'))+p)});
 			}
