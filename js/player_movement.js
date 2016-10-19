@@ -15,7 +15,7 @@ function createSelectors(floor){
 				kak=sap.attr('level');
 			if(
 				///////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>walkable
-				kak==7 || kak>=25 && kak<=72
+				kak>=7 && kak<=15 || kak>=25 && kak<=96 || kak>=241 && kak<=288
 				///////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>walkable
 				){
 				selection.append('<div class="selectionDiv" id="'+name+'"/>');
@@ -45,8 +45,18 @@ function hideSelectors(){
 }
 function showSelectors(){
 	$('.selectionDiv').css('display','block');
-	$('#selector'+currentFloor+'_'+posB.x+'_'+posB.y).css('display','none');
+	$('#selector'+currentFloor+'_'+posA.y+'_'+posA.x).css('display','none');////////hide current player position selector
 }
+function getPosition(a,b,f){
+	var	nak=$('#bloque'+f+"_"+a+"_"+b),
+		nek=parseWithoutTxt(nak.css('top'),px),
+		nik=parseWithoutTxt(nak.css('left'),px);
+	return {y:parseInt(nek)+7,x:parseInt(nik)+6};
+};
+
+var 	posA={y:0,x:7},
+	posB={y:"",x:""};
+
 function clickTile(){
 	$('.selectionDiv').click(function(){
 		var	bat="selectorX",
@@ -54,185 +64,161 @@ function clickTile(){
 			bit=bet.substring(bat.length,bat.length+4),
 			bot=bit.substring(1,2),
 			but=bit.substring(3,4);
-		//var finalPos=new positionPlayer(bot,but);
-		posB.x=bot;
-		posB.y=but;
-		movePlayer(posA,posB);
+		
+		posB={y:parseInt(bot),x:parseInt(but)};
+		hideSelectors();
+		resetBubble();
+		var player_route=starRoute(eval('zone'+currentFloor),posA,posB);
+		animatePlayer=setInterval(function(){
+			processToMove(player_route);
+		},animPlayTime);
 	});
 };
 
-var 	posA={x:1,y:4},
-	posB={x:"",y:""},
-	process=0,playerMovements=0,
-	processT;
+var animatePlayer, animPlayTime=150;
+var ptm=0;
 
-function getPosition(a,b,f){
-	var	nak=$('#bloque'+f+"_"+a+"_"+b),
-		nek=parseWithoutTxt(nak.css('top'),px),
-		nik=parseWithoutTxt(nak.css('left'),px);
-	return {x:parseInt(nek)+7 , y:parseInt(nik)+6};
-};
 
-var animatePlayer, animPlayTime=200;
+function processToMove(route){
+	var	mik=getPosition(route[ptm].y,route[ptm].x,currentFloor),
+		dep=parseInt($('#bloque'+currentFloor+"_"+route[ptm].y+"_"+route[ptm].x).css('z-index'));
+	$('#jugador01').css({'z-index':dep+1});	
+	$('#jugador01').css({'top': mik.y+px,'left': mik.x+px});
+	//$('#jugador01').css({})
+	//console.log(dep);
+	//console.log($('#jugador01').css('z-index'));
+	var kek,face;
+	if(ptm==0)	kek=posA;
+	if(ptm>0)	kek=route[ptm-1];
 
-function movePlayer(start,end){
-	hideSelectors();
-	resetBubble();
-
-	var	g=Math.abs(start.x-end.x),
-		h=Math.abs(start.y-end.y);
-	//g>h ? processT=g : processT=g;
-	if (g==0 && h==0){
-		console.log('no');
-	}else{
-		if (g>h) processT=g;
-		if (g<h) processT=h;
-		if (g==h) processT=g;
-		//console.log("g: "+g);
-		//console.log("h: "+h);
-		animatePlayer=setInterval(function(){processToMove()},animPlayTime);
+	for(var g=0;g<8;g++){
+		if(kek.y==route[ptm].y+neighNodes(g).y && kek.x==route[ptm].x+neighNodes(g).x){
+			face=g;
+			break;
+		}
 	}
-	
-};
+	//console.log(face);
+	var w=-150, h=-300;
+	if(ptm%2==0){
+		//console.log("pap");
+		switch(face){
+			case 0: $('#jugador01').css({"background-position" : 3*w+px+" "+h+px}); break; //S
+			case 1: $('#jugador01').css({"background-position" : 2*w+px+" "+3*h+px}); break; //SW
+			case 2: $('#jugador01').css({"background-position" : 2*w+px+" "+2*h+px}); break; //W
+			case 3: $('#jugador01').css({"background-position" : 2*w+px+" "+0+px}); break; //NW
+			case 4: $('#jugador01').css({"background-position" : 2*w+px+" "+h+px}); break; //N
+			case 5: $('#jugador01').css({"background-position" : 3*w+px+" "+0+px}); break; //NE
+			case 6: $('#jugador01').css({"background-position" : 3*w+px+" "+2*h+px}); break; //E
+			case 7: $('#jugador01').css({"background-position" : 3*w+px+" "+3*h+px}); break; //SE
+			default: break;
+		}
+	}
+	if(ptm%2!=0){
+		//console.log("pop");
+		switch(face){
+			case 0: $('#jugador01').css({"background-position" : 4*w+px+" "+h+px}); break; //S
+			case 1: $('#jugador01').css({"background-position" : w+px+" "+3*h+px}); break; //SW
+			case 2: $('#jugador01').css({"background-position" : w+px+" "+2*h+px}); break; //W
+			case 3: $('#jugador01').css({"background-position" : w+px+" "+0+px}); break; //NW
+			case 4: $('#jugador01').css({"background-position" : w+px+" "+h+px}); break; //N
+			case 5: $('#jugador01').css({"background-position" : 4*w+px+" "+0+px}); break; //NE
+			case 6: $('#jugador01').css({"background-position" : 4*w+px+" "+2*h+px}); break; //E
+			case 7: $('#jugador01').css({"background-position" : 4*w+px+" "+3*h+px}); break; //SE
+			default: break;
+		}
+	}
+	ptm++;
 
-function processToMove(){
-	process++;
-	playerMovements++;
-
-	if(posA.x<posB.x) posA.x++;
-	if(posA.x>posB.x) posA.x--;
-	if(posA.y<posB.y) posA.y++;
-	if(posA.y>posB.y) posA.y--;
-	
-	positionPlayer(posA.x,posA.y,'stand');
-	
-	//console.log(posA.x);
-	if(process>=processT){
+	if(ptm>route.length-1){
+		switch(face){
+			case 0: $('#jugador01').css({"background-position" : 5*w+px+" "+h+px}); break; //S
+			case 1: $('#jugador01').css({"background-position" : 0+px+" "+3*h+px}); break; //SW
+			case 2: $('#jugador01').css({"background-position" : 0+px+" "+2*h+px}); break; //W
+			case 3: $('#jugador01').css({"background-position" : 0+px+" "+0+px}); break; //NW
+			case 4: $('#jugador01').css({"background-position" : 0+px+" "+h+px}); break; //N
+			case 5: $('#jugador01').css({"background-position" : 5*w+px+" "+0+px}); break; //NE
+			case 6: $('#jugador01').css({"background-position" : 5*w+px+" "+2*h+px}); break; //E
+			case 7: $('#jugador01').css({"background-position" : 5*w+px+" "+3*h+px}); break; //SE
+			default: break;
+		}
+		
 		clearInterval(animatePlayer);
-		//console.log('stahp');
-		positionPlayer(posA.x,posA.y,'stand');
-		//console.log(posB.x);
-		showSelectors();
-		process=0;
-		processT='';
-		playerMovements=0;
+		star_openNodes.length=0;
+		star_closedNodes.length=0;
+		star_nodesLoop=0;
+		ptm=0;
 
 		//////////updae new position///////////////
-		posA.x=posB.x;
 		posA.y=posB.y;
-		posB.x="";
+		posA.x=posB.x;
 		posB.y="";
-		var actionsA=scanDestinationTile(posA,currentFloor);
-		var actionsB=analizeNeighbourTiles(actionsA);
-		//console.log(actionsB);
-		displayBubble(exp_act);
-		//console.log();
-		//console.log(scanDestinationTile(posA.x,posA.y,currentFloor));
+		posB.x="";
+		//console.log(posA);
+		//console.log(posB);
 
+		showSelectors();
+		displayBubble(scanDestinationTile(posA,currentFloor));
+		
 	};
 };
 var jugW=150,jugH=300;
 
-function neighNodes(ind){
-	var x,y;
-	switch(ind){
-		case 0: 	x=-1;		y=-1;		break;//NW
-		case 1: 	x=0;		y=-1;		break;//N
-		case 2: 	x=1;		y=-1;		break;//NE
-		case 3: 	x=1;		y=0;		break;//E
-		case 4: 	x=1;		y=1;		break;//SE
-		case 5: 	x=0;		y=1;		break;//S
-		case 6: 	x=-1;		y=1;		break;//SW
-		case 7: 	x=-1;		y=0;		break;//W
-		default:	break;
-	}
-	return{x,y};
-}
-
-function positionPlayer(top,lef,a){
-	var	player=$('#jugador01'),
-		mik=getPosition(top,lef,currentFloor),
-		onX=posA.x-posB.x,
-		onY=posA.y-posB.y,
-		fof,faf;
-	
-	//console.log("x: "+onX+", y: "+onY);
-
-	///////////facing player
-	if(a=="stand"){
-		if (onX==0 && onY<0) 	{fof=jugW*5;	faf=jugH*3};
-		if (onX==0 && onY>0)	{fof=0;			faf=0};
-		if(onX<0 && onY==0)	{fof=0;		faf=jugH*3};
-		if(onX>0 && onY==0)	{fof=jugW*5;		faf=0};
-
-		if(onX<0 && onY<0)	{fof=jugW*5;	faf=jugH};
-		if(onX>0 && onY>0)	{fof=0;		faf=jugH};
-
-		if(onX>0 && onY<0)	{fof=jugW*5;	faf=jugH*2};
-		if(onX<0 && onY>0)	{fof=0;		faf=jugH*2};
-	}
-	if(a=="walkA"){
-		if (onX==0 && onY<0) 	{fof=jugW*3;	faf=jugH*3};
-		if (onX==0 && onY>0)	{fof=jugW;		faf=0};
-		if(onX<0 && onY==0)	{fof=jugW;	faf=jugH*3};
-		if(onX>0 && onY==0)	{fof=jugW*3;		faf=0};
-
-		if(onX<0 && onY<0)	{fof=jugW*3;	faf=jugH};
-		if(onX>0 && onY>0)	{fof=jugW;	faf=jugH};
-
-		if(onX>0 && onY<0)	{fof=jugW*3;	faf=jugH*2};
-		if(onX<0 && onY>0)	{fof=jugW;	faf=jugH*2};
-	}
-	if(a=="walkB"){
-		if (onX==0 && onY<0) 	{fof=jugW*4;	faf=jugH*3};
-		if (onX==0 && onY>0)	{fof=jugW*2;		faf=0};
-		if(onX<0 && onY==0)	{fof=jugW*2;	faf=jugH*3};
-		if(onX>0 && onY==0)	{fof=jugW*4;		faf=0};
-
-		if(onX<0 && onY<0)	{fof=jugW*4;	faf=jugH};
-		if(onX>0 && onY>0)	{fof=jugW*2;	faf=jugH};
-
-		if(onX>0 && onY<0)	{fof=jugW*4;	faf=jugH*2};
-		if(onX<0 && onY>0)	{fof=jugW*2;	faf=jugH*2};
-	}
-	
-	///////////facing player
-	if(a=='stand'){
-		player.animate({'top': mik.x+px,'left': mik.y+px},animPlayTime,'linear');
-	};
-	player.css('background-position',fof*-1+px+" "+faf*-1+px);
-};
 
 function showPlayer(a,f){
-	var	lal=getPosition(a.x,a.y,f);
-	$('#playerArea').append('<div id="jugador01" class="player"/>');
+	var lal=getPosition(a.y,a.x,f);
+	$('#floor1').append('<div id="jugador01" class="player"/>');
 	$('#jugador01').css({
 		'display':'none',
 		'height':300+px,
 		'width':150+px,
-		'top':lal.x+px,
-		'left':lal.y+px
+		'top':lal.y+px,
+		'left':lal.x+px
 	});
 	$('#jugador01').fadeIn('fast');
-	$('#selector'+f+'_'+a.x+'_'+a.y).css('display','none');
+	$('#selector'+f+'_'+a.y+'_'+a.x).css('display','none');
 };
 var	p_actions=[];
-	/////////////////////////////	t_action 		tile 	texture
+	/////////////////////////t_action 		tile 	texture
 	p_actions[0]=	['i_op',		00,	0,0];
 	p_actions[1]=	["o_pick",		00,	0,1];
 	p_actions[2]=	["o_give",		00,	0,2];
-	p_actions[3]=	["o_drop",		00,	0,3];
-	p_actions[4]=	["m_push",		00,	0,4];
-	p_actions[5]=	["b_look",		00,	1,0];
+	//p_actions[3]=	["o_drop",		00,	0,3];
+
+	p_actions[3]=	["m_push",		219,	0,4];
+	p_actions[4]=	["m_push",		220,	0,4];
+	p_actions[5]=	["m_push",		221,	0,4];
+	p_actions[6]=	["m_push",		225,	0,4];
+	p_actions[7]=	["m_push",		226,	0,4];
+	p_actions[8]=	["m_push",		227,	0,4];
+
+	/*p_actions[5]=	["b_look",		00,	1,0];
 	p_actions[6]=	["b_read",		00,	1,1];	
 	p_actions[7]=	["b_lock",		00,	2,0];
-	p_actions[8]=	["b_unlo",		00,	2,1];
-	p_actions[9]=	["m_sup",		125,	3,0];
-	p_actions[10]=	["m_sdo",		126,	3,1];
-	p_actions[11]=	["m_cup",		00,	3,2];
-	p_actions[12]=	["m_sdo",		00,	3,3];
-	p_actions[13]=	["m_ent",		00,	4,0];
-	p_actions[14]=	["m_exi",		00,	4,1];
+	p_actions[8]=	["b_unlo",		00,	2,1];*/
+ 
+	//////////stairs up & down
+	p_actions[9]=	["m_sup",		97,	3,0];
+	p_actions[10]=	["m_sup",		103,	3,0];
+	p_actions[11]=	["m_sup",		109,	3,0];
+	p_actions[12]=	["m_sup",		115,	3,0];
+	p_actions[13]=	["m_sup",		125,	3,0];
+	p_actions[14]=	["m_sup",		131,	3,0];
+	p_actions[15]=	["m_sup",		137,	3,0];
+	p_actions[16]=	["m_sup",		143,	3,0];
+
+	p_actions[17]=	["m_sdo",		101,	3,1];
+	p_actions[18]=	["m_sdo",		107,	3,1];
+	p_actions[19]=	["m_sdo",		113,	3,1];
+	p_actions[20]=	["m_sdo",		119,	3,1];
+	p_actions[21]=	["m_sdo",		121,	3,1];
+	p_actions[22]=	["m_sdo",		127,	3,1];
+	p_actions[23]=	["m_sdo",		133,	3,1];
+	p_actions[24]=	["m_sdo",		139,	3,1];
+
+	p_actions[25]=	["m_cup",		00,	3,2];
+	p_actions[26]=	["m_sdo",		00,	3,3];
+	p_actions[27]=	["m_ent",		00,	4,0];
+	p_actions[28]=	["m_exi",		00,	4,1];
 
 var	exp_act=[];
 	exp_act[0]=p_actions[0];
@@ -247,16 +233,19 @@ function scanDestinationTile(pos,f){
 			dos=parseInt(pos.x)+parseInt(neighNodes(s).x),
 			zone=eval('zone'+f);
 		try{
-			if(zone[dos][uno]!=undefined){
-				if(zone[dos][uno]>=0){
-					arr.push(zone[dos][uno]);
+			if(zone[uno][dos]!=undefined){
+				if(f>1){
+					if(zone[uno][dos]==0 || zone[uno][dos]==97 || zone[uno][dos]==126 || zone[uno][dos]==144){
+						arr.push(eval('zone'+(f-1)[uno][dos]))
+					}
 				}
 			}
-		}catch(err){
-			//console.log(err);
-		};
+		}catch(err){};
 	};
-	return arr;	
+	var	newArr=analizeNeighbourTiles(arr);
+	newArr.push(p_actions[9],p_actions[17]); //////add open inventory action
+	//console.log(arr);
+	return newArr;
 };
 function analizeNeighbourTiles(arr){
 	var	a=[];
@@ -272,13 +261,12 @@ function analizeNeighbourTiles(arr){
 function displayBubble(bubbleArr){
 	$('.actionButton').hide();
 	var	pepe=$('#actionsBubble'),
-		papa=getPosition(posA.x,posA.y,currentFloor);
+		papa=getPosition(posA.y,posA.x,currentFloor);
 
 	pepe.fadeIn('fast');
-	//console.log(papa);
 	pepe.css({
-		'top':papa.x+25+px,
-		'left':papa.y+45+px,
+		'top':papa.y+25+px,
+		'left':papa.x+45+px,
 		'width':bubbleArr.length*60+60+5+px
 	});
 	for(var p=0;p<bubbleArr.length;p++){
@@ -308,19 +296,14 @@ function displayBubble(bubbleArr){
 
 function openActions(){
 	$('.alert').click(function(){
-		$('.actionButton').show();
+		$('.actionButton').slideDown('fast');
 	});
 };
 
-
 function resetBubble(){
-	//console.log('clik');
 	$('#actionsBubble').fadeOut('fast');
 	$('.actionButton').remove();
-}
-
-
-
+};
 
 function moveFloor(current,type,final){
 	$('.player').fadeOut('fast');
@@ -335,17 +318,15 @@ function moveFloor(current,type,final){
 			current=final;
 			currentFloor=final;
 			break;
-		case 'stairs_up':
+		case 'm_sup':
 			focusWalls(current,'hide');
 			focusWalls(current+1,'show');
-			movePlayer(posA,stairsPlayer(posA,current+1));
 			current++;
 			currentFloor++;
 			break;
-		case 'stairs_down':
+		case 'm_sdo':
 			focusWalls(current,'hide');
 			focusWalls(current-1,'show');
-			movePlayer(posA,stairsPlayer(posA,current+1));
 			how='hide';
 			currentFloor--;
 			break;
@@ -361,14 +342,7 @@ function moveFloor(current,type,final){
 	startFadeMod(current,how); ///////////////////floor.js 
 	//var	find_e=findExits(currentFloor);
 };
-var stairs_e=[97,103,109,115,125,131,137,143];
 
-function stairsPlayer(a,c){
-	var	x,y;
-	x=a.x;
-	y=a.y;
-	return {x,y};
-};
 
 /*find_stairEntrance(f){
 	var	j=eval('zone'+f),exp;
@@ -381,22 +355,32 @@ function stairsPlayer(a,c){
 		 }	 
 	};
 };*/
-function startFloor(){////////////////active in floor.js
+function startFloor(pM){////////////////active in floor.js
 	$('#objectArea *').hide();
 	createSelectors(currentFloor);
 	clickTile();
 	showPlayer(posA,currentFloor);
-	displayBubble(exp_act);
+	displayBubble(scanDestinationTile(posA,currentFloor));
+	//console.log(scanDestinationTile(posA,currentFloor));
 	generateObjects(currentFloor,building_A_objects);
+	//scrollToFloor(currentFloor);
 }
+
+function scrollToFloor(f){
+	var	dis=$('#bloque'+f+posA.y+"_"+posA.x).position.top;
+	console.log("dis: "+dis);
+	$("html, body").scrollTop(dis);
+};
+
 function playerAction(type){
 	switch(type){
 		case 'm_sup':
-			moveFloor(currentFloor,'stairs_up',currentFloor+1);
-			//stairsPlayer();
+			stairsPlayer(type,1);
+			moveFloor(currentFloor,type,currentFloor+1);
 			break;
 		case 'm_sdo':
-			moveFloor(currentFloor,'stairs_down',currentFloor-1);
+			stairsPlayer(type,-1);
+			moveFloor(currentFloor,type,currentFloor-1);
 			break;
 		case 'i_op':
 			uiDis('open','inventory');
@@ -410,9 +394,37 @@ function playerAction(type){
 				uiDis('close','magnifier');
 			});
 			break;
+		case "m_push":
+			openElevator(currentFloor,type);
+			break;
 		default:break;
 	};
 	//console.log(type);
+};
+
+var stairs_e=[97,103,109,115,125,131,137,143];
+function stairsPlayer(typ,toF){
+	var pap,lel;
+	toF>0 ? pap=-5 : pap=5;
+	for(var dad=0;dad<=stairs_e.length;dad++){
+		if(eval('zone'+currentFloor)[posA.y][posA.x]==stairs_e[dad]) lel=dad; break;
+	}
+	var lal=stairs_e[lel];
+	console.log(eval('zone'+currentFloor)[posA.y][posA.x]);
+	if(lal>96 && lal<120)		posA.x+=pap;
+	if(lal>120 && lal<144)	posA.y+=pap;
+	console.log(posA);
+		/*for(var g=0;g<=p_actions.length;g++){
+			if(typ==p_actions[g][0]){
+				for(var h=0;h<=stairs_e.length;h++){
+					if(p_actions[g][1]==stairs_e[h]){
+						if(h<4){
+							posA.x+=pap;
+						} else{
+							posA.y+=pap;
+						}
+					}
+	*/	
 };
 ////////////////////////////////floor selectors>>>>>>>>>>>>>>>>>>>>>>
 function buttonFunctions(){	
@@ -435,13 +447,6 @@ function bubbleButtons(){
 	});
 };
 ////////////////////////////////floor selectors>>>>>>>>>>>>>>>>>>>>>>
-
-function rePositionPlayer(ded){
-	var faf=getPosition(ded.x,ded.y,currentFloor);
-	posA.x=faf.x;
-	posA.y=faf.y;
-	createPlayer();
-};
 
 var cam=200; //////////////camera speed
 function scrollToFloor(f){
@@ -503,15 +508,6 @@ function focusWalls(floor,bol){
 		default: break;
 	};
 };
-
-
-
-
-
-
-
-
-
 ///////////////////////////Player inventory
 var	inventory=[];
 	//inventory.length=8;

@@ -3,10 +3,10 @@ function assignStyles(){
 	////////////////////sprites measures
 	var	columns=6,
 		rows=6,
-		max=288, ///////////total textures
+		max=360, ///////////total textures
 		maxObj=48,	///////////total objects
-		x=300/2,
-		y=2*x,
+		x=300/2, ////////////sprite width
+		y=2*x, //////////sprite height
 		url,
 		px="px",
 		divSize=document.createElement('style');

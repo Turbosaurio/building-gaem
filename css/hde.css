@@ -1,0 +1,40 @@
+body{
+	width: 80%;
+	background-color: rgb(30,30,30);
+	margin: 50px auto;
+	border-radius: 15px;
+	border: 2px solid white;
+	padding:50px;
+	color: white;
+	font-family: Verdana, Arial, sans-serif;
+}
+
+.animDiv{
+	padding:0px;
+	margin:0px;
+	width: 100px;
+	height: 200px;
+	border-radius: 5px;
+	border: 1px solid rgb(200,200,200);
+	display: inline-block;
+	text-align: center;
+}
+
+
+#gears1{	background: url("../old anim img/gears1.png") 0px 0px no-repeat}
+#gears2{	background: url("../old anim img/gears2.png") 0px 0px no-repeat}
+#gears3{	background: url("../old anim img/gears3.png") 0px 0px no-repeat}
+
+
+h1{
+	font-size: 2em;
+}
+p{
+	font-size: .8em;
+	color: rgb(125,125,125);
+}
+object #paginaexterior{
+	height: 1000px;
+	border: 1px solid white;
+	border-radius: 15px;
+}

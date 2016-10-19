@@ -1,0 +1,188 @@
+body{
+	background-color: rgb(43,43,43);
+	font-family: Verdana, Helvetica, sans-serif;
+}
+#sky{
+	background-color: rgb(165,165,175);
+		position:absolute;
+	left:0px;
+	top:0px;
+	height:1800px;
+}
+
+#selection{
+	position:absolute;
+	top:0px;
+	left:0px;
+	color:red;
+}
+.selectionDiv{
+	position:absolute;
+	background: url("../img/selector.png") -500px 0px no-repeat;
+	cursor: pointer;
+	background-size: 100%;
+}
+.selectionDiv:hover{
+	background: url("../img/selectorH.png");
+	background-size: 100%;
+}
+.selectionDiv:active{
+	background: url("../img/selectorA.png");
+	background-size: 100%;
+}
+.commands{
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	padding:100px 0px 100px 100px;
+	font-weight: bold;
+	background: rgb(65,65,65);
+	color: rgb(200,200,200);
+	border-bottom: 5px solid white;
+}
+.instructions{
+	font-weight: lighter;
+	list-style: none;
+}
+.instructions li{
+	margin-bottom: 15px;
+	line-height: 50px;
+}
+.i_btn{
+	height:50px;
+	width:50px;
+	border:1px solid white;
+	float:left;
+	margin-right: 6px;
+	background-image: url('../img/i_icons.png');
+	background-repeat: none;
+}
+
+#alert_btn	{background-position: -50px 0px}
+#red_btn	{background-position: -100px 0px}
+#blu_btn	{background-position: -150px 0px}
+#pur_btn	{background-position: -200px 0px}
+#gre_btn	{background-position: -250px 0px}
+
+h1{
+	color:rgb(120,120,120);
+}
+.controls{
+	border: 1px solid rgb(40,40,40);
+	text-align:right;
+	padding:15px 30px;
+	width: 200px;
+	text-align: center;
+	cursor: pointer;
+}
+.current{
+	border: 1px solid rgb(40,40,40);
+	background-color:rgb(40,40,40);
+	color: white;
+	margin-bottom: 5px;
+	width: 120px;
+	text-align: center;
+	padding: 5px;
+	cursor: pointer;
+}
+.player{
+	position:absolute;
+	background:url('../img/player.png') 0px 0px no-repeat;
+}
+
+
+
+/*ACTION BUBBLLELELELLELELE*/
+#actionsBubble{
+	height:70px;
+	background-position:0px 0px;
+	background-repeat: no-repeat;
+	position:absolute;
+	display:none;
+	margin:0px;
+	padding:0px;
+}
+.alert,
+.close{
+	width:60px;
+	height:60px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	background-image: url('../img/alert_a.png');
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+.alert:hover,
+.close:hover{
+	background-image: url('../img/alert_b.png'); 
+}
+.alert{background-position:0px 0px;}
+.close{background-position:-120px 0px;}
+
+.actionButton{
+	height:60px;
+	width:60px;
+	position:absolute;
+	display:none;
+	margin:0px;
+	padding:0px;
+	border:1px solid white;
+	background-image: url('../img/icons.png');
+	cursor:pointer;
+}
+.actionButton:hover,
+.actionButton:active{
+	background-image: url('../img/icons2.png');
+}
+
+
+
+
+/*INVENTORY MENU*/
+#inventory{
+	display:none;
+	color:rgb(200,200,200);
+	position:fixed;
+	bottom: 0px;
+	right: 0px;
+	width: 250px;
+	height: 200px;
+	background:rgb(25,25,25);
+	padding:50px
+}
+#inventory div{
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	border:1px solid white;
+}
+.ui_close{
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	cursor: pointer;
+}
+
+#objectArea{
+	position:absolute;
+}
+
+
+/*MAGNIFIER*/
+#magnifier{
+	position:fixed;
+	display: none;
+	margin: 0px;
+	padding: 0px;
+	top:200px;
+	left;0px;
+	background: rgb(25,25,25);
+	width:600px;
+	height:300px;
+}
+#zoom_img{
+	padding: 0px;
+	margin: 0px;
+}

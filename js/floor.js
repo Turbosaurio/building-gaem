@@ -32,12 +32,6 @@ function addStepWithClass(floor,a,b,stepName,zoneModule){
 	var name=selectorName+a+"_"+b;
 	$('#selection').append('<div id="'+name+'" class="selector"></div>')
 }*/
-function positionStep(target,posX,posY){
-	$("#"+target).css({
-		"left":posX+"px",
-		"top":posY+"px"
-	});
-};
 function getChar(number,pos){
 	var numero,start=pos-1;
 	number+="";
@@ -75,6 +69,13 @@ function doubleFractal(arr,arrIso){
 	};
 };
 
+function positionStep(target,posX,posY,dep){
+	$("#"+target).css({
+		"top":posY+"px",
+		"left":posX+"px",
+		 "z-index":dep-1000
+	});
+};
 function createIsometricScenario(floor,zoneArr,zoneArrIso,moduleName,initialX,initialY,selectorDiv){
 	var uno,dos,tres=0;
 	for(var k=0;k<zoneArrIso.length;k++){
@@ -82,7 +83,7 @@ function createIsometricScenario(floor,zoneArr,zoneArrIso,moduleName,initialX,in
 			uno=zoneArrIso[k][d][0];
 			dos=zoneArrIso[k][d][1];
 			addStepWithClass(floor,uno,dos,moduleName,zoneArr);
-			positionStep(moduleName+(uno+"_"+dos),arrayCoordX[tres]+initialX,k*moduleHeight+initialY);
+			positionStep(moduleName+(uno+"_"+dos),arrayCoordX[tres]+initialX,k*moduleHeight+initialY,tres);
 			tres++;
 		};
 	};
@@ -107,15 +108,15 @@ var anim=[], btn=[], fadeInMod=[], time=5;
 
 function animateModules(floor,mode){
 	var	kek=orderShow[anim[floor]].toString(),
-		indX, indY;
+		indY, indX;
 	if(kek.length===2){
-		indX=kek.substring(0,1),
-		indY=kek.substring(2,1);
+		indY=kek.substring(0,1),
+		indX=kek.substring(2,1);
 	}else{
-		indX="0";
-		indY=kek;
+		indY="0";
+		indX=kek;
 	};
-	var block=$('#bloque'+floor+'_'+indX+"_"+indY);
+	var block=$('#bloque'+floor+'_'+indY+"_"+indX);
 	switch(mode){
 		case "show":
 			block.fadeIn('fast'); 
@@ -150,21 +151,19 @@ function generateObjects(f,obj){
 	//ko.fadeIn('fast');
 	for(var la=0;la<obj.length;la++){
 		var w=obj[la];
-		//console.log(w);
 		if(f==w.floor){
 			ko.append('<div id="'+name+la+'" class="object'+w.value+'"></div>');
-			var	p_g=getPosition(w.loc.x,w.loc.y,w.floor),
+			var	p_g=getPosition(w.loc.y,w.loc.x,w.floor),
 				pep=$('#'+name+la);
 
-			console.log(w.value);
-			//console.log(pep.css('display'));
+			//console.log(w.value);
 			$('#'+name+la).css({
 				"display":"block",
-				"top":p_g.x+px,
-				"left":p_g.y+px
+				"top":p_g.y+px,
+				"left":p_g.x+px
 			});
 		}else{
-			console.log('No objects in this floor');
+			console.log('No objects in this floor.');
 		}
 	};
 };
@@ -174,5 +173,7 @@ function generateObjects(f,obj){
 
 $(document).ready(function(){
 	generateLevels(moduleWidth,moduleHeight,floorNum);
-	buttonFunctions();
+	moveFloor(0,'start',1);
+	
+	//buttonFunctions();
 });

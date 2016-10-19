@@ -1,25 +1,41 @@
 'use strict'
-
-
-
 var	divName="square";
 var	mapa=[];
 		////////0,1,2,3,4,5,6,7,8,9
-	mapa[0]=[0,0,0,0,0,0,0,0,0,0];
-	mapa[1]=[0,0,0,0,0,0,0,0,0,0];
-	mapa[2]=[0,0,0,0,0,0,0,0,0,0];
-	mapa[3]=[0,0,0,0,0,0,0,0,0,0];
-	mapa[4]=[0,0,0,0,0,0,0,0,0,0];
-	mapa[5]=[0,0,0,0,0,0,0,0,0,0];
-	mapa[6]=[0,0,0,0,0,0,0,0,0,0];
+	mapa[0]=[0,0,1,0,0,0,0,0,0,0];
+	mapa[1]=[0,0,1,0,0,0,0,0,0,0];
+	mapa[2]=[0,0,1,0,0,0,0,0,0,0];
+	mapa[3]=[0,0,1,0,0,0,0,0,0,0];
+	mapa[4]=[0,0,1,0,0,0,0,0,0,0];
+	mapa[5]=[0,0,1,0,0,0,0,0,0,0];
+	mapa[6]=[0,0,1,0,0,0,0,0,0,0];
 	mapa[7]=[0,0,0,0,0,0,0,0,0,0];
 	mapa[8]=[0,0,0,0,0,0,0,0,0,0];
 	mapa[9]=[0,0,0,0,0,0,0,0,0,0];
 
-var	nodes=[];
-for(var r=0;r<10;r++){	nodes[r]=["o","o","o","o","o","o","o","o","o","o"]};
-function resetNodes(){	for(var t=0;t<nodes.length;t++){	for(var h=0;h<nodes[t].length;h++){	nodes[t][h]="o"	}}};
-function closeNode(x,y){	node[y][x]="c"};
+var	nodes=[],openNodes=[],closedNodes=[];
+
+function resetNodes(){
+	for(var t=0;t<nodes.length;t++){
+		for(var h=0;h<nodes[t].length;h++){
+			nodes[t][h]="o"	
+		};
+	};
+	openNodes=[];
+	closedNodes=[];
+};
+function closeNode(x,y){
+	node[y][x]="c"
+	closedNodes.push(mapa[x][y]);
+};
+function openNode(x,y){
+	if(x||y){
+		openNodes.push(closedNodes.shift(mapa[x][y]));
+		return(openNodes[openNodes.length]);
+	}else{
+		return(openNodes[0]);
+	}
+};
 
 function addDiv(arr){
 	for(var g=0;g<arr.length;g++){
@@ -41,66 +57,55 @@ function positionDiv(name,y,x){
 		'left':x+"px"
 	});
 };
-var findInterval;
-var	ruta=[],
-	process=0,
-	open=[],
-	close=[];
+
 function buttonDiv(){
 	$('#start').click(function(){
-		/*var	kok='clase',
-			kik=$(this).attr('id'),
-			kak=kik.substring(6,7),
-			kuk=kik.substring(8,9);
-		$(this).text('click');
-		console.log('click');
-		eP.x=kak;
-		eP.y=kuk;*/
-		//$(this).css('background',"rgb(175,150,150)");
-		findRoute(mapa,cP,eP);
-		/*var ber=g_f_costs(cP,eP,mapa);
+		
+		var mem=findRoute(mapa,cP,eP);
+
+		var ber=g_f_costs(cP,eP,mapa);
 		var bar=findLowest(ber.gCost);
 		var foo=findLowest(ber.fCost);
-
-		console.log(ber.gCost);
-		console.log("min: "+bar.min);
-		console.log("pos: "+bar.pos);
-		console.log("rep: "+bar.rep);
-		console.log('.................');
-
-		nodes[neighNodes(bar.pos).a][neighNodes(bar.pos).b]="c";
-		if(bar.rep>1){
-			nodes[neighNodes(bar.spos).a][neighNodes(bar.spos).b]="c";
-		}
-		for(var y=0;y<8;y++){
-			var lal=neighNodes(y).a;
-			var lel=neighNodes(y).b;
-
-			$('#'+divName+lal+'_'+lel).append("<p>g: "+ber.gCost[y]+'<br/>f: '+ber.fCost[y]+'</p>');
-
-			//console.log(lal);
-			//console.log(nodes[y]);
-		};
-
-		cP.x=kak;
-		cP.y=kuk;
-		console.log('current, x: '+cP.x+", y: "+cP.y);*/
-		//console.log(neighNodes(bar.pos).a);
-		/*var chab=bar.gCost;
-		var cheb=bar.fCost;
-
-		var lap=Math.min.apply(null,chab);
-		var lep=Math.min.apply(null,cheb);
-
-		console.log('g_costs: '+chab);
-		console.log('g cost lowest: '+lap+" at: "+chab.indexOf(lap));
-		console.log('f_costs: '+cheb);
-		console.log('f cost lowest: '+lep+" at: "+cheb.indexOf(lep));
-		console.log("/////////////////////");*/
 	});
+	// 	console.log(ber.gCost);
+	// 	console.log("min: "+bar.min);
+	// 	console.log("pos: "+bar.pos);
+	// 	console.log("rep: "+bar.rep);
+	// 	console.log('.................');
+
+	// 	nodes[neighNodes(bar.pos).a][neighNodes(bar.pos).b]="c";
+	// 	if(bar.rep>1){
+	// 		nodes[neighNodes(bar.spos).a][neighNodes(bar.spos).b]="c";
+	// 	}
+	// 	for(var y=0;y<8;y++){
+	// 		var lal=neighNodes(y).a;
+	// 		var lel=neighNodes(y).b;
+
+	// 		$('#'+divName+lal+'_'+lel).append("<p>g: "+ber.gCost[y]+'<br/>f: '+ber.fCost[y]+'</p>');
+
+	// 		//console.log(lal);
+	// 		//console.log(nodes[y]);
+	// 	};
+
+	// 	cP.x=kak;
+	// 	cP.y=kuk;
+	// 	console.log('current, x: '+cP.x+", y: "+cP.y);
+	// 	//console.log(neighNodes(bar.pos).a);
+	// 	var chab=bar.gCost;
+	// 	var cheb=bar.fCost;
+
+	// 	var lap=Math.min.apply(null,chab);
+	// 	var lep=Math.min.apply(null,cheb);
+
+	// 	console.log('g_costs: '+chab);
+	// 	console.log('g cost lowest: '+lap+" at: "+chab.indexOf(lap));
+	// 	console.log('f_costs: '+cheb);
+	// 	console.log('f cost lowest: '+lep+" at: "+cheb.indexOf(lep));
+	// 	console.log("/////////////////////");
+	// });
 };
 
-function findRoute(mapArr,current,final,routeArr){
+function findRoute(mapArr,current,final){
 	var	progress=0,
 		closed=[],
 		open=[];
@@ -116,18 +121,9 @@ function findRoute(mapArr,current,final,routeArr){
 		var	to_close=open[progress].shift(findLowest());
 		closed.push(to_close);
 		progress++;
-	;}
+	}ñ
 	return closed;
 };
-
-function resetRoute(){
-	process=0;
-	cP.x=eP.x;
-	cP.x=eP.y;
-	eP.x="";
-	eP.y="";
-	for(var r=0;r<10;r++){	nodes[r]=["o","o","o","o","o","o","o","o","o","o"]};
-}
 
 function findLowest(arr){
 	var	min=Math.min.apply(null,arr),
@@ -142,7 +138,12 @@ function findLowest(arr){
 }
 
 var cP={y:0,x:0};
-var eP={y:9,x:9};
+var eP={y:0,x:9};
+
+function startHL(divS,divE){///////////RED
+	$('#'+divName+divS.y+"_"+divS.x).css('background','red');
+	$('#'+divName+divE.y+"_"+divE.x).css('background','blue');
+};
 
 function g_f_costs(nodeA,nodeB,arrMap){
 	var	h=[],g=[], f=[],
@@ -212,5 +213,6 @@ function findN(mapArr,x,y){
 
 $(document).ready(function(){
 	addDiv(mapa);
+	startHL(cP,eP);
 	buttonDiv();
 });

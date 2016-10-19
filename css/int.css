@@ -1,0 +1,10 @@
+div.textito{
+	font-size: 1em;
+	color: rgb(25,25,25);
+	padding: 25px;
+	background-color: white;
+	border: 1px solid rgb(100,100,100);
+	border-radius: 15px;
+	font-size: Verdana, Arial, Sans-serif;
+	width: 10%;
+}

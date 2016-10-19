@@ -1,0 +1,21 @@
+body{
+	background: rgb(45,45,45);
+	width: 80%;
+	margin: 15px auto;
+	padding: 0px;
+}
+div#cheb{
+	margin-top: 50px;
+}
+
+.divSqr{
+	margin: 0px;
+	padding: 0px;
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	text-align: center;
+	color: white;
+	background: url('../img/prisms.png') 0px 0px no-repeat;
+}
+

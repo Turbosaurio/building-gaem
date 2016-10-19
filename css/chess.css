@@ -1,0 +1,99 @@
+body{
+	background-color: rgb(50,50,50);
+	width:3000px;
+}
+#notas{
+	width: 80%;
+	margin: 50px auto;
+	background: rgb(150,150,150); 
+}
+#notas p{
+	margin: 0px 50px;
+}
+
+#tablero{
+	width: 80%;
+	margin: 50px auto;
+	color:white;
+	font-size: 2em;
+}
+#tablero div{
+	position: absolute;
+	width: 300px;
+	height: 600px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.marmol0	{	background: url("../img/vacio.png")		0px 0px;}
+
+.marmol1	{	background: url("../img/marmol.png")		0px 0px}
+.marmol2	{	background: url("../img/marmol.png")		-300px 0px}
+.marmol3	{	background: url("../img/marmol.png")		-600px 0px}
+.marmol4	{	background: url("../img/marmol.png")		-900px 0px}
+.marmol5	{	background: url("../img/marmol.png")		-1200px 0px}
+.marmol6	{	background: url("../img/marmol.png")		-1500px 0px}
+
+.marmol7	{	background: url("../img/marmol.png")		0px -600px}
+.marmol8	{	background: url("../img/marmol.png")		-300px -600px}
+.marmol9	{	background: url("../img/marmol.png")		-600px -600px}
+.marmol10	{	background: url("../img/marmol.png")		-900px -600px}
+.marmol11	{	background: url("../img/marmol.png")		-1200px -600px}
+.marmol12	{	background: url("../img/marmol.png")		-1500px -600px}
+
+.marmol13	{	background: url("../img/marmol.png")		0px -1200px}
+.marmol14	{	background: url("../img/marmol.png")		-300px -1200px}
+.marmol15	{	background: url("../img/marmol.png")		-600px -1200px}
+.marmol16	{	background: url("../img/marmol.png")		-900px -1200px}
+.marmol17	{	background: url("../img/marmol.png")		-1200px -1200px}
+.marmol18	{	background: url("../img/marmol.png")		-1500px -1200px}
+
+.marmol19{	background: url("../img/marmol.png")		0px -1800px}
+.marmol20	{	background: url("../img/marmol.png")		-300px -1800px}
+.marmol21	{	background: url("../img/marmol.png")		-600px -1800px}
+.marmol22	{	background: url("../img/marmol.png")		-900px -1800px}
+.marmol23	{	background: url("../img/marmol.png")		-1200px -1800px}
+.marmol24	{	background: url("../img/marmol.png")		-1500px -1800px}
+
+
+#jugadores div{
+	position: absolute;
+	width: 300px;
+	height: 600px;
+	margin: 0px;
+	padding: 0px;
+}
+#selection div{
+	position: absolute;
+	margin: 0px;
+	padding: 0px;
+	width:127px;
+	height:90px;
+}
+#selection div:hover{
+	background: rgba(230,230,230,.2);
+	border-radius: 20px;
+}
+.commands{
+	position: fixed;
+	font-family: Verdana;
+	font-weight: bold;
+	background: rgb(175,175,175);
+	color: rgb(55,55,50);
+	width: 500px;
+	border-radius: 20px;
+	padding: 25px;
+}
+.controls{
+	display: inline-block;
+	border: 1px solid rgb(40,40,40);
+	background: white;
+	border-radius: 12px;
+	margin-bottom: 5px;
+	width: 60px;
+	text-align: center;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.player1{	background: url("../img/player.png")	0px 0px;}
