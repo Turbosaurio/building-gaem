@@ -34,7 +34,7 @@ function clickTile(floor){
 		posB={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
 		var color=getColor(eval('floor_'+floor)[posA.y][posA.x]);
 
-		var	player_route=starRoute(eval('floor_'+floor),posA,posB,color);
+		var	player_route=starRoute(rotateLevel(eval('floor_'+floor),current_dir),posA,posB,color);
 		//var	player_route=starRoute(rotateLevel(floor_2,"rot"),posA,posB,color);
 		//console.log(getDepths(player_route,floor));
 		animatePlayer=setInterval(function(){

@@ -142,14 +142,15 @@ function getColor(val){
 	if(val==290 || val>199 && val<361) return 'blue';
 	if(val>466 && val<480) return 'street';
 }
-function createSelectors(f,leng,t){
+function createSelectors(f,leng,color){
+	$('#selection *').remove();
 	var selection=$('#selection');
 	for(var j=0;j<leng;j++){
 		for(var k=0;k<leng;k++){
 			var	sap=$('#tile'+f+'_'+j+"_"+k),
 				name='selec'+f+'_'+j+"_"+k,
 				kak=sap.attr('level');
-				if(instanceColor(kak,t)){
+				if(instanceColor(kak,color)){
 					selection.append('<div class="tileSelec" id="'+name+'" ypos="'+j+'" xpos="'+k+'"/>');
 					$('#selec'+f+"_"+posA.y+"_"+posA.x).hide();
 					$('#'+name).css({
@@ -245,11 +246,11 @@ for(var ch=0;ch<=9;ch++){
 var	t_w=34,
 	t_h=74;
 
-function startFloor(f,z,typ){
+function startFloor(f,color,typ){
 	var arr=eval('floor_'+f);
 	$('#piso'+f+' *').remove();
 	createLevel(arr,'piso'+f,"txt",t_w,t_h,'tile',f,typ);
-	createSelectors(f,eval('floor_'+f).length,z);
+	createSelectors(f,eval('floor_'+f).length,color);
 	rotatePlayerPos(posA,typ,arr.length);
 	showPlayer(posA,f);
 	/*$('html, body').animate({
