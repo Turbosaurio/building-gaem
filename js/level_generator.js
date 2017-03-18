@@ -85,6 +85,7 @@ function rotatePlayerPos(pos,dir,len){
 			}
 		}
 	}
+	console.log(dir+": y: "+y+", x: "+x);
 	posA={y,x};
 }
 
@@ -251,6 +252,7 @@ function startFloor(f,color,typ){
 	$('#piso'+f+' *').remove();
 	createLevel(arr,'piso'+f,"txt",t_w,t_h,'tile',f,typ);
 	createSelectors(f,eval('floor_'+f).length,color);
+	//posA.y=rotatePlayerPos(posA,typ,arr.length).y;
 	rotatePlayerPos(posA,typ,arr.length);
 	showPlayer(posA,f);
 	/*$('html, body').animate({
@@ -260,7 +262,8 @@ function startFloor(f,color,typ){
 	clickTile(f);
 };
 function createFloor(f,typ){
-	var arr=eval('floor_'+f);
+	var arr=rotateLevel(eval('floor_'+f),typ);
+	$('#piso'+f+" *").remove();
 	createLevel(arr,'piso'+f,"txt",t_w,t_h,'tile',f,typ);
 }
 
@@ -277,16 +280,9 @@ $(document).ready(function(){
 		
 	}
 	$('body').append('<div id="selection"/>');
-	//createLevel(eval('floor_'+3),'piso'+3,"txt",t_w,t_h,'tile',3,"ori");
-	//createLevel(eval('floor_'+1),'piso'+1,"txt",t_w,t_h,'tile',1);
-	/*createFloor(0,current_dir);
-	createFloor(1,current_dir);
-	createFloor(2,current_dir);*/
-	startFloor(0,'yellow',current_dir);
-	rotateFloorButton(0);
-	//showNPC(npcA,3);
-	//var w=-150, h=-300;
-	//$('#jugador01').css({"background-position" : 5*w+"px"+" "+3*h+"px"});
+	createFloor(3,current_dir);
+	startFloor(3,'yellow',current_dir);
+	rotateFloorButton(3);
 });
 
 function rotateFloorButton(f){
@@ -309,10 +305,15 @@ function rotateFloorButton(f){
 			default: break;
 		}
 		$('#piso'+f+' *').remove();
-		rotatePlayerPos(posA, to_cam, eval('floor_'+f).length);
+		//rotatePlayerPos(posA, to_cam, eval('floor_'+f).length);
+		/*for(var r=0;r<f;r++){
+			createFloor(r,to_cam);
+			flipClass(rotateLevel(eval('floor_'+r),to_cam),f,to_cam);
+		}*/
 		startFloor(f,'yellow',to_cam);
 		flipClass(rotateLevel(eval('floor_'+f),to_cam),f,to_cam);
 		current_dir=to_cam;
+		console.log(posA);
 	});
 }
 function flipClass(arr,f,typ){
